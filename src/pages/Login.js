@@ -1,21 +1,27 @@
-import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import { notify } from "../components/Notification";
-
+import { useState } from "react";
 import { useAuthContext } from "../hooks";
 import { Navigate } from "react-router-dom";
 
+import Button from "react-bootstrap/Button";
+import { notify } from "../components/Notification";
+
 export const Login = function () {
+  // Email input hook
   const [email, setEmail] = useState("");
+  // password input hook
   const [password, setPassword] = useState("");
+
+  // hook for login button state  to avoid multiple clicks leading to unnecessary API calls
   const loginButtonDefaultState = { state: false, buttonTag: "Login" };
   const [loggingIn, setLoggingIn] = useState({
     ...loginButtonDefaultState,
   });
+  // Context hook for user functionalities
   const auth = useAuthContext();
-
+  // Handles login form submit
   const handleFormSubmit = async function (event) {
     event.preventDefault();
+    // sets the state to login mode and disables submit button to avoid multiple clicks
     setLoggingIn({
       state: true,
       buttonTag: (
@@ -25,18 +31,27 @@ export const Login = function () {
         ></span>
       ),
     });
-    console.log(auth);
+    // Function call
     let response = await auth.login(email, password);
+    // enables the form submit button
     setLoggingIn({ ...loginButtonDefaultState });
-    console.log(response);
+
+    if (!response) {
+      return (
+        <div className="container-fluid text-center">Internal Server Error</div>
+      );
+    }
     if (response.success) {
       notify().success("Successfully Signed in");
+      // Redirect to shared link
     } else {
+      // Login unsuccessful
       setEmail("");
       setPassword("");
       notify().error(response.message);
     }
   };
+  // If already logged in navigate to home
   if (auth.user) {
     return <Navigate to="/" />;
   }
@@ -44,7 +59,10 @@ export const Login = function () {
   return (
     <div className="container-fluid text-center">
       <h2>Login</h2>
+      <h4 className="text-secondary">Log in to create your poll</h4>
+      {/* login form */}
       <form action="" id="login-form" onSubmit={handleFormSubmit}>
+        {/* Email */}
         <div className="text-center">
           <input
             type="email"
@@ -59,6 +77,7 @@ export const Login = function () {
           />
         </div>
         <div>
+          {/* Password */}
           <input
             type="password"
             name="password"
@@ -71,6 +90,7 @@ export const Login = function () {
             required
           />
         </div>
+        {/* Submit Button */}
         <Button
           type="submit"
           form="login-form"

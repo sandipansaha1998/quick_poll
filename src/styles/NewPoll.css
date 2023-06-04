@@ -1,0 +1,30 @@
+textarea {
+  border: none;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  background-color: rgb(255, 246, 246);
+  border-radius: 5px;
+  padding: 15px;
+  resize: none;
+  font-size: 1.35rem;
+  transition: all 0.2s ease-in;
+}
+textarea:focus {
+  box-shadow: rgba(21, 6, 233, 0.35) 0px 0px 4px 2px;
+  color: rgb(15, 34, 239);
+  outline: none !important;
+}
+input {
+  border: none;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  background-color: rgb(255, 246, 246);
+  border-radius: 5px;
+  padding: 8px;
+  resize: none;
+  font-size: 1.1rem;
+  transition: all 0.2s ease-in;
+}
+input:focus {
+  box-shadow: rgba(21, 6, 233, 0.35) 0px 0px 4px 2px;
+  color: rgb(15, 34, 239);
+  outline: none !important;
+}

@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useProvideAuth } from "../hooks";
 const initialState = {
-  user: "inti",
+  user: null,
   login: () => {},
   loading: true,
   logout: () => {},

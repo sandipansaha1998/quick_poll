@@ -7,16 +7,16 @@ export const notify = () => {
       toast.success(message, {
         draggable: false,
         position: "top-left",
-        autoClose: 30000,
-        onClick: () => {
-          toast.dismiss();
-          console.log("dismissed");
-        },
+        autoClose: 2000,
+        toastId: "1",
       });
     },
     error: (message) => {
       toast.error(message, {
         draggable: false,
+        position: "top-left",
+        autoClose: 2000,
+        toastId: "1",
       });
     },
   };

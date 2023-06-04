@@ -1,13 +1,13 @@
 import ReactTypingEffect from "react-typing-effect";
 import { useMediaQuery } from "react-responsive";
+import { Link } from "react-router-dom";
 export const Home = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1224px)",
   });
-  const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+
   return (
-    <div className="container-fluid d-flex flex-column align-items-center justify-content-center p-5">
+    <div className=" d-flex flex-column align-items-center justify-content-center ">
       <div
         style={isDesktopOrLaptop ? { fontSize: `4vw` } : { fontSize: `8vw` }}
         className="fw-bold "
@@ -31,7 +31,9 @@ export const Home = () => {
         className="bg-success text-light p-2 p-md-3 text-center m-2  fs-4 fw-bold "
         style={{ borderRadius: `5px` }}
       >
-        <span>Create Poll</span>
+        <Link to="/poll/create-new" className="text-decoration-none text-light">
+          <span>Create Poll</span>
+        </Link>
       </div>
     </div>
   );

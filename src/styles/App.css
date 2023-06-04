@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+  border-bottom: 2px solid rgb(225, 220, 220);
+}
+.cursor-pointer:hover {
+  border-bottom: 2px blue solid !important;
+}
+
+.customCard {
+  border-radius: 30px;
+  background: #ffffff;
+  box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+}
+
+.displayCard {
+  border-radius: 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}

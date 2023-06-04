@@ -2,43 +2,66 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { getIsEmailUnique as isUnique, signup } from "../api";
 import { notify } from "../components/Notification";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../hooks";
 
 export const SignUp = function () {
+  const auth = useAuthContext();
+  // Hook for email
   const [email, setEmail] = useState("");
+  // Hook for Validation of email
+  // contains -isValid,message
+  // A valid email is if follows '@domain_name.xyz and is unique'
   const [emailValidation, setEmailValidation] = useState({
     isValid: false,
     message: "",
   });
-
+  // Hook for input Name
   const [name, setName] = useState(undefined);
-
+  // Hook for input : Password
   const [password, setPassword] = useState("");
+  // Hook for input : confirm password
   const [confimrPassword, setConfirmPassword] = useState("");
+  // Hook for password validaiton A password is validate
+  //  - minimum 6 characters length
+  // - the password and cofirm password match
   const [passwordValidation, setPasswordValidation] = useState({
     isValid: false,
     message: "",
   });
-
+  // Loading to freeze the button on click in order prevent unneccessary mutliple requests
   const [loading, setLoading] = useState(false);
+
+  // Allover Form Validation
+  // If valdiated ,Submit button is enabled
   const [formInputValidation, setFormInputValidation] = useState(true);
-
   const navigate = useNavigate();
-
+  // UseEffect hook to update All over Form validaiton
   useEffect(() => {
+    //Compulsory feild check
     if (email !== "" && password !== "")
       setFormInputValidation(
         emailValidation.isValid && passwordValidation.isValid
       );
   }, [emailValidation, passwordValidation]);
+  // Hook for email Validation.
   useEffect(() => {
-    getIsEmailUnique();
+    getIsEmailUnique(); //checks if the email is unique
     if (email !== "" && password !== "")
       setFormInputValidation(
         emailValidation.isValid && passwordValidation.isValid
       );
   }, [email]);
+
+  // To update password validaiton on change in password and confirm password change
+  useEffect(() => {
+    console.log("Change");
+    isPasswordValidate();
+  }, [password, confimrPassword]);
+
+  // Function to check if email is unique
   const getIsEmailUnique = async () => {
+    // Matches the regular expression
     if (
       !String(email)
         .toLowerCase()
@@ -48,6 +71,7 @@ export const SignUp = function () {
       setEmailValidation({ isValid: false, message: "Not a valid email" });
       return;
     }
+    // Checks if email is unique and updates validation state
     let isEmailUnique = await isUnique(email);
     if (isEmailUnique.success) {
       console.log("unqiue");
@@ -57,12 +81,7 @@ export const SignUp = function () {
       setEmailValidation({ isValid: false, message: "Email id Taken" });
     }
   };
-
-  useEffect(() => {
-    console.log("Change");
-    isPasswordValidate();
-  }, [password, confimrPassword]);
-
+  // Checks if Password is validate
   const isPasswordValidate = () => {
     if (password.length < 6) {
       setPasswordValidation({
@@ -81,32 +100,45 @@ export const SignUp = function () {
       }
     }
   };
+
+  // Handles Form Submit
   const handleFormSubmit = async (event) => {
     try {
       event.preventDefault();
-
+      // Freezes button
       setLoading(true);
+      // Sends sign up request through API
       let response = await signup(email, name, password);
-      console.log(response);
+
       setLoading(false);
+
       if (response.success) {
         notify().success("Successfully Signed up");
+        // Reset Form
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        // Redirect to login
         navigate("/login");
       } else {
+        // If registration fails,Error notification is shown
         notify().error(response.data.message);
       }
     } catch (e) {
       console.log(e);
     }
   };
+  // if user is logged in redirect to login page
+  if (auth.user) {
+    return <Navigate to="/" />;
+  }
   return (
     <div className="container-fluid text-center">
       <h2>Register</h2>
+      {/* Sign up Form */}
       <form action="" id="sign-up-form" onSubmit={handleFormSubmit}>
         <div className="text-center">
+          {/* Email */}
           <input
             type="email"
             name="email"
@@ -120,12 +152,14 @@ export const SignUp = function () {
             }}
           />
         </div>
+        {/* Email Validaiton Message */}
         {email !== "" && !emailValidation.isValid && (
           <div className="container-fluid col-12 col-lg-5 text-danger text-start">
             *{emailValidation.message}
           </div>
         )}
         <div className="text-center">
+          {/* Name */}
           <input
             type="name"
             name="name"
@@ -139,6 +173,7 @@ export const SignUp = function () {
           />
         </div>
         <div>
+          {/* Password */}
           <input
             type="password"
             name="password"
@@ -153,6 +188,7 @@ export const SignUp = function () {
           />
         </div>
         <div>
+          {/* Confirm password */}
           <input
             type="confirm_password"
             name="confirm_password"
@@ -165,6 +201,7 @@ export const SignUp = function () {
             }}
           />
         </div>
+        {/* Passowrd Validation messages */}
         {passwordValidation.isValid && (
           <div className="container-fluid col-12 col-lg-5 text-success text-start">
             Passwords match
@@ -175,9 +212,7 @@ export const SignUp = function () {
             *{passwordValidation.message}
           </div>
         )}
-        {console.log(
-          `${emailValidation.isValid} && ${passwordValidation.isValid} == ${formInputValidation}`
-        )}
+        {/* Submit button */}
         <Button
           variant="dark"
           className="col-10 col-lg-3 m-4 p-2"
