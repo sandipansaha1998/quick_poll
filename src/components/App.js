@@ -22,7 +22,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuthContext } from "../hooks";
 import { Loader } from "./Loader";
-import { InternalServerError } from "../pages/InternalServerError";
 
 function PrivateRoute({ children }) {
   const auth = useAuthContext();

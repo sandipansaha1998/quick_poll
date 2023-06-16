@@ -14,7 +14,6 @@ import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { notify } from "../components/Notification";
 import { Modal } from "react-bootstrap";
 import { socketManager } from "../socket";
-import { InternalServerError } from "./InternalServerError";
 
 export const PollResults = () => {
   const questionID = useParams().id;
@@ -77,9 +76,7 @@ export const PollResults = () => {
         fetchPollDetails();
 
         let totalVotes = document.querySelector(`.totalVotes`);
-        console.log("Halla bol");
-        console.log("HAlla bol", totalVotes);
-        console.log(totalVotes);
+
         if (totalVotes) {
           totalVotes.classList.add("totalVotesChange");
 
@@ -99,6 +96,7 @@ export const PollResults = () => {
     return () => {
       socketManager.removeListener("recordedVote");
     };
+    // eslint-disable-next-line
   }, []);
 
   function getTotalNumberofVotes(quesiton) {

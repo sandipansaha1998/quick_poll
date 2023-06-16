@@ -8,11 +8,20 @@ function CopyButton() {
       setIsCopied(false);
     }, 600);
   }, [isCopied]);
-  const copyContent = () => {
+  const copyContent = async () => {
     const modalLink = document.getElementById("modal-link");
-    // Copy the text inside the text field
-    navigator.clipboard.writeText(modalLink.innerText);
+    const textToCopy = modalLink.innerText;
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    document.body.appendChild(tempInput);
+    // Copy the text
+    tempInput.select();
+
+    document.execCommand("copy");
+
     setIsCopied(true);
+    document.body.removeChild(tempInput);
   };
 
   return (
