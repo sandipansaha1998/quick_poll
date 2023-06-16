@@ -28,9 +28,9 @@ export function NavigationBar() {
     notify().success("Logged out");
     navigate("/login");
   };
-  useEffect(() => {
-    console.log("Change in auth");
-  }, [auth]);
+  // useEffect(() => {
+  //   console.log("Change in auth");
+  // }, [auth]);
   return (
     <div>
       {" "}
@@ -89,7 +89,6 @@ export function NavigationBar() {
           {/* Navbar if no user logged in */}
           {auth.user === null && (
             <div>
-              {console.log(auth.user)}
               <FontAwesomeIcon
                 icon={faBars}
                 size="2xl"

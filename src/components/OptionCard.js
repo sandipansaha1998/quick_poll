@@ -3,9 +3,6 @@ import "../styles/OptionCard.css";
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 export const OptionCard = ({ option, chosenOption, totalVotes }) => {
-  console.log(option);
-  console.log(chosenOption);
-  console.log(totalVotes);
   // Width state
   const [width, setWidth] = useState(0);
   const [votePercentage, setVotePercentage] = useState(0);
@@ -15,7 +12,7 @@ export const OptionCard = ({ option, chosenOption, totalVotes }) => {
     if (totalVotes !== 0)
       setVotePercentage(Math.floor((option.votes / totalVotes) * 100));
     else setVotePercentage(0);
-  }, []);
+  }, [option]);
   // Rerenders on change in total votes
   useEffect(() => {
     setTimeout(() => {
@@ -33,7 +30,6 @@ export const OptionCard = ({ option, chosenOption, totalVotes }) => {
           : `optionCard`
       }
     >
-      {console.log(option._id + " " + chosenOption)}
       <h3 className="">
         {/* Title  */}
         <p>{option.title}</p>

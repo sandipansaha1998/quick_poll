@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
+import { Navigate, useNavigate } from "react-router-dom";
+
 import { getIsEmailUnique as isUnique, signup } from "../api";
 import { notify } from "../components/Notification";
-import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks";
 
 export const SignUp = function () {
@@ -55,7 +56,6 @@ export const SignUp = function () {
 
   // To update password validaiton on change in password and confirm password change
   useEffect(() => {
-    console.log("Change");
     isPasswordValidate();
   }, [password, confimrPassword]);
 
@@ -73,6 +73,10 @@ export const SignUp = function () {
     }
     // Checks if email is unique and updates validation state
     let isEmailUnique = await isUnique(email);
+    if (!isEmailUnique) {
+      notify().error("Could not validate email");
+      return;
+    }
     if (isEmailUnique.success) {
       console.log("unqiue");
       setEmailValidation({ isValid: true });
@@ -111,7 +115,9 @@ export const SignUp = function () {
       let response = await signup(email, name, password);
 
       setLoading(false);
-
+      if (!response) {
+        notify.error("Could not Sign up");
+      }
       if (response.success) {
         notify().success("Successfully Signed up");
         // Reset Form

@@ -1,7 +1,8 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-
-import "../styles/App.css";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import { connectionManager, socket } from "../socket";
+import "../styles/App.css";
 import { NavigationBar } from "./Navbar";
 
 import {
@@ -21,6 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuthContext } from "../hooks";
 import { Loader } from "./Loader";
+import { InternalServerError } from "../pages/InternalServerError";
 
 function PrivateRoute({ children }) {
   const auth = useAuthContext();
@@ -31,10 +33,20 @@ function PrivateRoute({ children }) {
 
 function App() {
   const auth = useAuthContext();
+  const navigate = useNavigate();
 
+  // Initialising socket connection
+  connectionManager(socket).connect();
+
+  // Checks if
+  if (auth.error === "Authentication Expired") {
+    auth.logout();
+    navigate("/login");
+    return;
+  }
+
+  auth.catchError(null);
   if (auth.loading) {
-    console.log("loading");
-
     return <Loader />;
   }
   return (
@@ -77,15 +89,7 @@ function App() {
         {/* Sign Up */}
         <Route exact path="/sign-up" element={<SignUp />}></Route>
         {/* New Poll  */}
-        <Route
-          exact
-          path="/poll/create-new"
-          element={
-            <PrivateRoute>
-              <NewPoll />
-            </PrivateRoute>
-          }
-        ></Route>
+        <Route exact path="/poll/create-new" element={<NewPoll />}></Route>
         {/* Poll results */}
         <Route exact path="/poll/results/:id" element={<PollResults />}></Route>
         {/* Polling page */}

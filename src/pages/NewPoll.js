@@ -26,7 +26,6 @@ export const NewPoll = () => {
     if (!isFirstRender) {
       optionsList = optionsList.filter((option) => {
         if (option.value !== "") {
-          console.log("option:", option.value);
           return true;
         }
         return false;
@@ -66,6 +65,9 @@ export const NewPoll = () => {
       }
       return false;
     });
+    optionsList = optionsList.map((option) => {
+      return option.value;
+    });
     setIsFirstRender(false);
     if (question === "" || optionsList.length < 2) {
       console.log("Inside submit ");
@@ -76,10 +78,16 @@ export const NewPoll = () => {
       return;
     }
     let response = await createNewPoll(auth.user.id, question, optionsList);
+    if (!response) {
+      notify().error("Could not create poll");
+      return;
+    }
     if (response.success) {
       const questionID = response.data.data.question._id;
       notify().success("Poll created");
       navigate(`/poll/results/${questionID}`);
+    } else {
+      notify().error("Server Error");
     }
   };
 

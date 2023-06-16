@@ -7,26 +7,44 @@ import {
 import { useEffect } from "react";
 import { getMyPolls, getMyVotedPolls } from "../api";
 import { Loader } from "../components/Loader";
+import { useAuthContext } from "../hooks";
+import { notify } from "../components/Notification";
 export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
-  const [myPollsCount, setMypollsCount] = useState(0);
-  const [myVotedPollsCount, setMyVotedPollsCount] = useState(0);
-
+  const [myPollsCount, setMypollsCount] = useState("-");
+  const [myVotedPollsCount, setMyVotedPollsCount] = useState("-");
+  const auth = useAuthContext();
   useEffect(() => {
     async function fetchData() {
       //   Poll Created
       const pollsCreated = await getMyPolls();
-      if (pollsCreated.success && pollsCreated.data.data) {
-        setMypollsCount(pollsCreated.data.data.length);
-      }
       // Poll Voted
       const pollsVoted = await getMyVotedPolls();
-      if (pollsVoted.success && pollsCreated.data.data) {
-        setMyVotedPollsCount(pollsVoted.data.data.length);
+      // If  request is not fulfilled
+      if (!pollsCreated || !pollsVoted) {
+        notify().error("Could not update");
+        setLoading(false);
+        return;
+      }
+
+      if (pollsCreated.success) {
+        if (!pollsCreated.data.data) setMypollsCount(0);
+        else setMypollsCount(pollsCreated.data.data.length);
+      }
+
+      if (pollsVoted.success) {
+        if (!pollsVoted.data.data) setMyVotedPollsCount(0);
+        else setMyVotedPollsCount(pollsVoted.data.data.length);
       }
       setLoading(false);
     }
-    fetchData();
+    // Restricted Route
+    if (auth.user) {
+      if (auth.user.exp < Date.now()) {
+        auth.catchError("Authentication Expired");
+        return;
+      } else fetchData();
+    }
   }, []);
   if (loading) {
     return <Loader />;

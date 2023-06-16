@@ -1,12 +1,12 @@
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:5050";
+const URL = "http://13.48.5.207:5050";
 
 export const socket = io(URL, {
   autoConnect: false,
 });
 
-export const connectionManager = () => {
+export const connectionManager = (socket) => {
   return {
     connect: () => {
       socket.connect();
@@ -16,4 +16,27 @@ export const connectionManager = () => {
       socket.disconnect();
     },
   };
+};
+// socketManager.js
+
+export const socketManager = {
+  listeners: [],
+
+  addListener: (event, callback) => {
+    socket.on(event, callback);
+    socketManager.listeners.push(event);
+  },
+
+  removeListener: (event) => {
+    socket.off(event);
+    socketManager.listeners = socketManager.listeners.filter(
+      (listener) => listener !== event
+    );
+  },
+
+  emitToMountedComponents: (event, data) => {
+    socketManager.listeners.forEach((listener) => {
+      socket.emit(event, data);
+    });
+  },
 };

@@ -1,4 +1,5 @@
 import { API_URLS, LOCALSTORAGE_TOKEN_KEY } from "../utils";
+
 // Custom Fetch function to dynamically add parameters and HTTP Request type
 const customFetch = async (url, { body, ...customConfig }) => {
   // Retreives the JSON token
@@ -32,30 +33,38 @@ const customFetch = async (url, { body, ...customConfig }) => {
 
     // Internal Server Error
     if (response.status === 500) throw new Error("Internal Server Error");
+
     const responseJSON = await response.json();
+
     // Request and response cycle is successful
     if (response.status === 200) {
       return {
         success: true,
         data: responseJSON,
       };
+      // Unauthorized Error
+    } else if (response.status === 401) {
+      return {
+        success: false,
+        message: "Unauthorized",
+      };
+      // Not Found Error
+    } else if (response.status === 404) {
+      return {
+        success: false,
+        message: "Not Found",
+      };
     } else {
       return {
         success: false,
-        data: responseJSON,
       };
     }
   } catch (e) {
-    console.error("error");
-    return {
-      success: false,
-      data: { message: "Internal Server Error" },
-    };
+    console.log("Error", e.message);
   }
 };
 // Checks if a mail ID is unique
 export const getIsEmailUnique = (email) => {
-  console.log(API_URLS.getIsEmailUnique(email));
   return customFetch(API_URLS.getIsEmailUnique(email), {});
 };
 // Sign up

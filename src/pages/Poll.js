@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Cookies from "js-cookie";
 
+import { connectionManager, socket } from "../socket";
+
 import { getPollResults, addVote, getUserChosenOption } from "../api";
 import { Loader } from "../components/Loader";
 import { getFormattedDate } from "../utils";
@@ -30,7 +32,6 @@ export const Poll = () => {
 
   //manages click event on option cards
   function chooseOption(event) {
-    console.log("click");
     setChosenOption(event.currentTarget.id);
   }
   //
@@ -39,6 +40,10 @@ export const Poll = () => {
       // Fetching the poll details
       const responsePollResults = await getPollResults(questionID);
       setLoading(false);
+      if (!responsePollResults) {
+        notify().error("Could not Load");
+        return;
+      }
 
       if (responsePollResults.success) {
         setQuestion(responsePollResults.data.data);
@@ -66,7 +71,10 @@ export const Poll = () => {
     async function fetchDataAPI() {
       // To check if the user has voted
       const chosenOptionResponse = await getUserChosenOption(questionID);
-
+      if (!chosenOptionResponse) {
+        notify().error("Could not Load");
+        return;
+      }
       if (chosenOptionResponse.success) {
         //if User has not voted
         if (chosenOptionResponse.data.data === null) {
@@ -81,7 +89,11 @@ export const Poll = () => {
     }
 
     if (auth.user) {
-      fetchDataAPI();
+      if (auth.user.exp > Date.now()) {
+        fetchDataAPI();
+      } else {
+        auth.catchError("Authentication Expired");
+      }
     } else {
       fetchDataCookie();
     }
@@ -97,11 +109,22 @@ export const Poll = () => {
     } else {
       // API call kor adding the vote to the desired option
       let userID = "";
+
       if (auth.user) {
         userID = auth.user.id;
+        if (auth.user.exp < Date.now()) {
+          auth.catchError("Authentication Expired");
+          return;
+        }
       }
+
       setLoading(true);
       const response = await addVote(chosenOption, userID);
+      if (!response) {
+        notify().error("Could not cast vote");
+        setLoading(false);
+        return;
+      }
       console.log(response.data.data);
       setLoading(false);
       //
@@ -121,14 +144,19 @@ export const Poll = () => {
           } else {
             const votedPolls = {};
             votedPolls[questionID] = chosenOption;
-
+            // Commented
             Cookies.set("quick-poll", JSON.stringify(votedPolls));
             console.log("No cookie Found and hence", votedPolls);
             console.log(JSON.parse(Cookies.get("quick-poll")));
           }
         }
+
+        socket.emit("voted", questionID);
+
         // Navigates to Results.
         navigate(`/poll/results/${questionID}`);
+      } else {
+        notify().error("Voting Failed");
       }
     }
   };

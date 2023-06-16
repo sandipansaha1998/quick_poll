@@ -35,7 +35,7 @@ export const Login = function () {
     let response = await auth.login(email, password);
     // enables the form submit button
     setLoggingIn({ ...loginButtonDefaultState });
-
+    console.log(response);
     if (!response) {
       return (
         <div className="container-fluid text-center">Internal Server Error</div>
@@ -48,7 +48,11 @@ export const Login = function () {
       // Login unsuccessful
       setEmail("");
       setPassword("");
-      notify().error(response.message);
+      if (response.message === "Unauthorized")
+        notify().error("Invalid credentials");
+      else if (response.message === "Server is down")
+        notify().error("Could not login");
+      else notify().error("No User found.Register to begin");
     }
   };
   // If already logged in navigate to home
