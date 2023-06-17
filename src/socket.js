@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const URL = "http://13.48.5.207:5050";
+const URL = "https://polingapi.socialise-india.in";
 
 export const socket = io(URL, {
   autoConnect: false,
