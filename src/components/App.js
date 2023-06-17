@@ -43,8 +43,9 @@ function App() {
     navigate("/login");
     return;
   }
-
+  // Reseting Error Hook on App render
   auth.catchError(null);
+
   if (auth.loading) {
     return <Loader />;
   }
@@ -52,6 +53,7 @@ function App() {
     <div className="App">
       <NavigationBar />
       <ToastContainer />
+
       <Routes>
         {/* Home */}
         <Route exact path="/" element={<Home />}></Route>
@@ -64,6 +66,7 @@ function App() {
             </PrivateRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/mypolls"
@@ -73,6 +76,7 @@ function App() {
             </PrivateRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/myvotes"

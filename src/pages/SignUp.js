@@ -67,7 +67,6 @@ export const SignUp = function () {
         .toLowerCase()
         .match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)
     ) {
-      console.log("Not a valid email");
       setEmailValidation({ isValid: false, message: "Not a valid email" });
       return;
     }
@@ -78,10 +77,8 @@ export const SignUp = function () {
       return;
     }
     if (isEmailUnique.success) {
-      console.log("unqiue");
       setEmailValidation({ isValid: true });
     } else {
-      console.log("not unique");
       setEmailValidation({ isValid: false, message: "Email id Taken" });
     }
   };

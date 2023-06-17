@@ -1,5 +1,5 @@
 import Spinner from "react-bootstrap/Spinner";
-
+//Loader
 export const Loader = () => {
   return (
     <div

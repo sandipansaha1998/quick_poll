@@ -22,7 +22,6 @@ export const NewPoll = () => {
 
   useEffect(() => {
     let optionsList = [...options];
-    console.log(optionsList);
     if (!isFirstRender) {
       optionsList = optionsList.filter((option) => {
         if (option.value !== "") {
@@ -60,7 +59,6 @@ export const NewPoll = () => {
     let optionsList = [...options];
     optionsList = optionsList.filter((option) => {
       if (option.value !== "") {
-        console.log("option:", option.value);
         return true;
       }
       return false;
@@ -70,7 +68,6 @@ export const NewPoll = () => {
     });
     setIsFirstRender(false);
     if (question === "" || optionsList.length < 2) {
-      console.log("Inside submit ");
       setPollFormValidation({
         isValid: false,
         message: "* You need to enter atleast 2 options",

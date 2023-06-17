@@ -9,6 +9,7 @@ import { useAuthContext } from "../hooks";
 import { notify } from "../components/Notification";
 export const MyPolls = () => {
   const [loading, setLoading] = useState(true);
+  // Polls created by the user
   const [myPolls, setMypolls] = useState([]);
   const navigate = useNavigate();
   const auth = useAuthContext();
@@ -16,6 +17,7 @@ export const MyPolls = () => {
     async function fetchData() {
       //   Poll Created
       const pollsCreated = await getMyPolls();
+      // if Polls Creation failed
       if (!pollsCreated) {
         notify().error("Could not update");
         setLoading(false);
@@ -27,6 +29,7 @@ export const MyPolls = () => {
       }
       setLoading(false);
     }
+    // Checks for JWT expiry before sending request.If Expired catchError redirects to login
     if (auth.user) {
       if (auth.user.exp < Date.now()) auth.catchError("Authentication Expired");
       else fetchData();
@@ -39,6 +42,7 @@ export const MyPolls = () => {
   return (
     <div className="d-flex flex-column gap-4">
       <h1 className="container fw-bold">Polls Created</h1>
+      {/* If no polls created by the user  */}
       {myPolls.length < 1 && <h3 className="mx-auto">- No Polls created -</h3>}
       {myPolls.map((poll) => {
         return (
@@ -55,6 +59,7 @@ export const MyPolls = () => {
               {poll.user.name}
             </h5>
             on {getFormattedDate(new Date(poll.createdAt))}
+            {/* Poll published date */}
           </div>
         );
       })}

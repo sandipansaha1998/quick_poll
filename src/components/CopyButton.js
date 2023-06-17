@@ -1,6 +1,9 @@
+// Copy button used in the modal to copy the link
+
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCopy } from "@fortawesome/free-solid-svg-icons";
+
 function CopyButton() {
   const [isCopied, setIsCopied] = useState(false);
   useEffect(() => {
@@ -8,16 +11,14 @@ function CopyButton() {
       setIsCopied(false);
     }, 600);
   }, [isCopied]);
+  // Copies the content
   const copyContent = async () => {
     const modalLink = document.getElementById("modal-link");
     const textToCopy = modalLink.innerText;
     const tempInput = document.createElement("input");
     tempInput.value = textToCopy;
-
     document.body.appendChild(tempInput);
-    // Copy the text
     tempInput.select();
-
     document.execCommand("copy");
 
     setIsCopied(true);

@@ -35,7 +35,6 @@ export const Login = function () {
     let response = await auth.login(email, password);
     // enables the form submit button
     setLoggingIn({ ...loginButtonDefaultState });
-    console.log(response);
     if (!response) {
       return (
         <div className="container-fluid text-center">Internal Server Error</div>

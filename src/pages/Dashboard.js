@@ -26,7 +26,7 @@ export const Dashboard = () => {
         setLoading(false);
         return;
       }
-
+      // If request if fulfilled
       if (pollsCreated.success) {
         if (!pollsCreated.data.data) setMypollsCount(0);
         else setMypollsCount(pollsCreated.data.data.length);

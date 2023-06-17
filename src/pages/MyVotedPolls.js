@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { getFormattedDate } from "../utils";
-
 import { useEffect } from "react";
+
+import { getFormattedDate } from "../utils";
 import { getMyVotedPolls } from "../api";
 import { Loader } from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks";
 import { notify } from "../components/Notification";
+
 export const MyVotedPolls = () => {
   const [loading, setLoading] = useState(true);
+  // Polls voted by the user.
   const [myVotedPolls, setMyVotedPolls] = useState([]);
   const auth = useAuthContext();
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ export const MyVotedPolls = () => {
     async function fetchData() {
       //   Polls Voted
       const pollsVoted = await getMyVotedPolls();
+
+      // If response is invalid
       if (!pollsVoted) {
         notify().error("Could not update");
         setLoading(false);
@@ -26,6 +30,8 @@ export const MyVotedPolls = () => {
       }
       setLoading(false);
     }
+    // Checks for JWT expiry before sending request.If Expired catchError redirects to login
+
     if (auth.user) {
       if (auth.user.exp < Date.now()) auth.catchError("Authentication Expired");
       else fetchData();
@@ -52,8 +58,10 @@ export const MyVotedPolls = () => {
             <h2 className="fw-bold"> {poll.title}</h2>
             <h5 className="text-dark">
               <span className="text-secondary">Created by </span>
+              {/* Poll Creater name */}
               {poll.user.name}
             </h5>
+            {/* Poll Published Date */}
             on {getFormattedDate(new Date(poll.createdAt))}
           </div>
         );

@@ -18,22 +18,16 @@ export const useProvideAuth = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    // console.log("hello hook");
-
+    // Checks Local Storage for JWT to authenticate requests
     const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
     if (userToken) {
       const userDecoded = jwt_decode(userToken);
-      console.log(userDecoded);
       // Checking validity of JSON web token
       if (userDecoded.exp > Date.now()) setUser(userDecoded);
       else setError("Authentication Expired");
     }
     setLoading(false);
   }, []);
-
-  // useEffect(() => {
-  //   setLoading(!loading);
-  // }, [user]);
 
   const login = async (email, password) => {
     let response = await userLogin(email, password);
@@ -42,11 +36,13 @@ export const useProvideAuth = () => {
         success: false,
         message: "Server is down",
       };
-    console.log(response);
     try {
       if (response.success) {
+        // Decodes the user
         const userDecoded = jwt_decode(response.data.data.token);
+        // Sets the user
         setUser(userDecoded);
+        // Sets the JWT in the local storage for further usage
         setItemLocalStorage(
           LOCALSTORAGE_TOKEN_KEY,
           response.data.data.token ? response.data.data.token : null
@@ -56,25 +52,23 @@ export const useProvideAuth = () => {
           success: true,
         };
       } else {
-        console.log(response);
         return {
           success: false,
           message: response.message,
         };
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const logout = async () => {
+    // Resets User to null and removes the JWT from localstorage
     setUser(null);
     removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
     setError(null);
   };
 
   const catchError = async (error) => {
-    console.log(error);
+    // Catches Internal server Error and JWT expiration Error
     setError(error);
     return;
   };

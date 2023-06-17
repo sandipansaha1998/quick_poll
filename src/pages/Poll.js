@@ -53,18 +53,14 @@ export const Poll = () => {
     }
     async function fetchDataCookie() {
       const objectString = Cookies.get("quick-poll");
-      console.log("asdsadasdadsd", objectString);
       if (objectString) {
         // contains the ID of questions voted
         const questions = JSON.parse(objectString);
         // if the user has already voted  the qustion
-        console.log(questions);
         if (questions.hasOwnProperty(questionID)) {
-          console.log("You cannot vote,already voted for", questions);
           setChosenOption(questions[questionID]);
           setisVoted(true);
         } else {
-          console.log("You can vote");
         }
       }
     }
@@ -89,6 +85,7 @@ export const Poll = () => {
     }
 
     if (auth.user) {
+      // Checks if the JWT has expired
       if (auth.user.exp > Date.now()) {
         fetchDataAPI();
       } else {
@@ -125,7 +122,6 @@ export const Poll = () => {
         setLoading(false);
         return;
       }
-      console.log(response.data.data);
       setLoading(false);
       //
       if (response.success) {
@@ -144,10 +140,8 @@ export const Poll = () => {
           } else {
             const votedPolls = {};
             votedPolls[questionID] = chosenOption;
-            // Commented
+
             Cookies.set("quick-poll", JSON.stringify(votedPolls));
-            console.log("No cookie Found and hence", votedPolls);
-            console.log(JSON.parse(Cookies.get("quick-poll")));
           }
         }
 
@@ -253,7 +247,6 @@ export const Poll = () => {
           onClick={handleSubmitVote}
           disabled={chosenOption === "" || !isVoted ? false : true}
         >
-          {console.log(!isVoted)}
           Submit Vote
         </button>
       </div>

@@ -41,17 +41,13 @@ export const PollResults = () => {
     }
     async function fetchDataCookie() {
       const objectString = Cookies.get("quick-poll");
-      console.log("asdsadasdadsd", objectString);
       if (objectString) {
         // contains the ID of questions voted
         const questions = JSON.parse(objectString);
         // if the user has already voted  the qustion
-        // console.log(questions);
         if (questions.hasOwnProperty(questionID)) {
-          // console.log("You cannot vote,already voted for", questions);
           setChosenOption(questions[questionID]);
         } else {
-          // console.log("You can vote");
         }
       }
     }
@@ -70,8 +66,6 @@ export const PollResults = () => {
       // question state changed.
     }
     socketManager.addListener("recordedVote", (qID) => {
-      console.log("Params:", questionID);
-      console.log("Socket:", qID);
       if (qID === questionID) {
         fetchPollDetails();
 
@@ -178,7 +172,7 @@ export const PollResults = () => {
             className="container-fluid text-dark p-3 d-flex"
             style={{ background: "#f8f8f8" }}
           >
-            http://localhost:3000/poll/{question._id}
+            https://quick-poll-india.netlify.app/poll/{question._id}
           </div>
         </Modal.Body>
 

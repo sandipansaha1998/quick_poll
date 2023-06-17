@@ -1,3 +1,8 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import { useAuthContext } from "../hooks";
+
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Navbar from "react-bootstrap/Navbar";
@@ -6,16 +11,14 @@ import Nav from "react-bootstrap/Nav";
 
 import logo from "../images/logo.png";
 
-import { Link, useNavigate } from "react-router-dom";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { useAuthContext } from "../hooks";
 import { notify } from "./Notification";
-import { tab } from "@testing-library/user-event/dist/tab";
+
 export function NavigationBar() {
+  // Manages the tab control
   const [isOpen, setIsOpen] = useState(false);
+
   const auth = useAuthContext();
   const toggleAccessControls = () => {
     setIsOpen(!isOpen);
@@ -28,9 +31,7 @@ export function NavigationBar() {
     notify().success("Logged out");
     navigate("/login");
   };
-  // useEffect(() => {
-  //   console.log("Change in auth");
-  // }, [auth]);
+
   return (
     <div>
       {" "}
@@ -56,8 +57,6 @@ export function NavigationBar() {
               alt="QuickPoll"
             ></img>
           </Navbar.Brand>
-          {/* Hook */}
-          {/* {console.log(auth.user)} */}
           {auth.user !== null && (
             <div className="dropdown">
               <DropdownButton
@@ -70,9 +69,12 @@ export function NavigationBar() {
                 style={{ display: "", backgroundColor: "pink !important" }}
               >
                 <div className="container-fluid text-center fs-5">
+                  {/* Username for Logged in user */}
                   {auth.user.name}
                 </div>
                 <div className="container-fluid text-center text-secondary">
+                  {/* Email for Logged in user */}
+
                   {auth.user.email}
                 </div>
                 <Dropdown.Divider className="mx-auto col-9" />
