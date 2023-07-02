@@ -1,70 +1,110 @@
-# Getting Started with Create React App
+# Quick Poll
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Real-time polling system where users can create,share, participate in polls
+and view live voting results without
+page refresh.Users are allowed to vote only once to maintain the consistency of the results.
+> Implemented user authentication,
+responsive UI, and data visualization
+with dynamic progress bars.It has
+anonymous voting feature as well.
 
-## Available Scripts
+## [Hosted URL link](https://quick-poll-india.netlify.app/)
 
-In the project directory, you can run:
+The application was built on MERN stack.
+### [Github repository of the backend API.](https://github.com/sandipansaha1998/polling_API)
 
-### `npm start`
+Integrated Socket.IO for real-time 
+communication..The application was hosted
+on AWS EC2 with nginx and ensured secure
+communication with SSL.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Features
+- [x] Signup and login users with unique emailID.
+- [x] Create a poll with atleast 2 options
+- [x] Share a poll with other users
+- [x] View results realtime
+- [x] Anonymous voting
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Dependencies
+Particulars | Version
+----------- | ---------
+@fortawesome/fontawesome-svg-core | 6.4.0
+@fortawesome/free-regular-svg-icons | 6.4.0
+@fortawesome/free-solid-svg-icons | 6.4.0
+@fortawesome/react-fontawesome | 0.2.0
+@testing-library/jest-dom | 5.16.5
+@testing-library/react | 13.4.0
+@testing-library/user-event | 13.5.0
+babel-plugin-macros | 3.1.0
+bootstrap | 5.2.3
+crypto-js | 4.1.1
+js-cookie | 3.0.5
+jwt-decode | 3.1.2
+react | 18.2.0
+react-bootstrap | 2.7.4
+react-dom | 18.2.0
+react-responsive | 9.0.2
+react-router-dom | 6.11.2
+react-scripts | 5.0.1
+react-toastify | 9.1.3
+react-typing-effect | 2.0.5
+socket.io | 4.6.1
+socket.io-client | 4.6.1
+styled-components | 5.3.11
 
-### `npm test`
+### Directory
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+.
+├── README.md
+├── netlify.toml
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+└── src
+    ├── api
+    │   └── index.js
+    ├── components
+    │   ├── App.js
+    │   ├── CopyButton.js
+    │   ├── Loader.js
+    │   ├── Navbar.js
+    │   ├── Notification.js
+    │   ├── OptionCard.js
+    │   └── index.js
+    ├── hooks
+    │   └── index.js
+    ├── images
+    │   └── logo.png
+    ├── index.js
+    ├── pages
+    │   ├── Dashboard.js
+    │   ├── Error404.js
+    │   ├── Home.js
+    │   ├── Login.js
+    │   ├── MyPolls.js
+    │   ├── MyVotedPolls.js
+    │   ├── NewPoll.js
+    │   ├── Poll.js
+    │   ├── PollResults.js
+    │   ├── SignUp.js
+    │   └── index.js
+    ├── providers
+    │   ├── Authprovider.js
+    │   └── index.js
+    ├── socket.js
+    ├── styles
+    │   ├── App.css
+    │   ├── NewPoll.css
+    │   ├── OptionCard.css
+    │   ├── PollResults.css
+    │   ├── index.css
+    │   └── navbar.module.css
+    └── utils
+        └── index.js
+```
+  
