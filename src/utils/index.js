@@ -1,4 +1,4 @@
-const API_ROOT = "https://polingapi.socialise-india.in/api/v1";
+const API_ROOT = "https://polling-api-lbat.onrender.com/api/v1";
 
 export const API_URLS = {
   login: () => `${API_ROOT}/user/create-session`,
